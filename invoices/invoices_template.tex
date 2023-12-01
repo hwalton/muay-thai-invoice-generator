@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{helvet}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage[ddmmyyyy]{datetime}
+\renewcommand{\dateseparator}{-}
+
+% Set page margins
+\geometry{left=25mm, right=25mm, top=20mm, bottom=20mm}
+
+% Set font to Arial (Helvetica)
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+% Invoice title
+    \begin{center}
+        \Large\textbf{\underline{Invoice}}
+    \end{center}
+
+% Logo
+    \noindent
+    \includegraphics[width=0.33\textwidth]{../data/logo.jpg}
+
+
+% Top right address
+    \vspace{-2cm} % Adjust vertical space as needed
+    \begin{flushright}
+        Sheffield Thai Boxing Gymnasium (Wicker Camp) \\
+        Clarence Works, Effingham Rd \\
+        Sheffield S4 7YS \\
+        Date: \today{} \\
+        PO: {{ po_num }}
+    \end{flushright}
+
+    \vspace{1cm} % Add some vertical space
+
+% Bill to section
+    \noindent \textbf{\underline{Bill to:}} \\
+    Club Sport \\
+    Sheffield Students Union \\
+    Western Bank \\
+    S10 2TG
+
+    \vspace{1cm}
+
+% Table for invoice details
+    \begin{longtable}{@{} l p{0.5\textwidth} r r r @{}}
+        \toprule
+        \textbf{Item no.} & \raggedright\textbf{Description} & \textbf{Unit Price (£)} & \textbf{Qty} & \textbf{Amount (£)} \\
+        \midrule
+        \endhead
+        % Example row (repeat similar rows for each item)
+        1 & {{ description }} & {{ unit_price }} & {{ qty }} & {{ amount }} \\
+        % ...
+        \bottomrule
+    \end{longtable}
+
+% Total table
+    \hfill \begin{tabular}{lr}
+               \textbf{Total (£)} & \textbf{ {{ total_amount }}} \\
+    \end{tabular}
+
+    \vspace{1cm} % Add some vertical space
+
+    \noindent\hrulefill
+
+% Payment details
+    \noindent \textbf{\underline{Payment Details:}} \\
+    \begin{tabular}{l@{\hspace{3em}}l}
+        \vspace{0em} \\
+        Account Name: & {{ account_name }} \\
+        Sort Code:    & {{ sort_code }} \\
+        Account No.:  & {{ account_number }} \\
+    \end{tabular}
+
+
+\end{document}
