@@ -31,6 +31,8 @@ template = env.get_template('invoices_template.tex')
 
 invoice_list = []
 
+
+
 # Create a list of InvoiceData objects
 invoice_data = InvoiceData(
     name_id='bobby',
