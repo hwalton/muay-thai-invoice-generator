@@ -40,13 +40,14 @@ rendered_tex = template.render( po_num=invoice_data.po_num,
 )
 
 # Write the rendered LaTeX to a file
-tex = '../invoices/output.tex'
-with open(tex, 'w') as f:
+tex = f'../invoices/invoice_{invoice_data.po_num}'
+tex_tex = f'{tex}.tex'
+with open(tex_tex, 'w') as f:
     f.write(rendered_tex)
 
 # Compile the LaTeX file to PDF (ensure pdflatex is in your PATH)
-tex_dir = os.path.dirname(os.path.abspath(tex))
-subprocess.run(['pdflatex', os.path.basename(tex)], cwd=tex_dir)
+tex_dir = os.path.dirname(os.path.abspath(tex_tex))
+subprocess.run(['pdflatex', os.path.basename(tex_tex)], cwd=tex_dir)
 
 for ext in ['log', 'aux']:
-    os.remove(f'../invoices/output.{ext}')
+    os.remove(f'{tex}.{ext}')
