@@ -160,7 +160,11 @@ cython_debug/
 #.idea/
 
 #invoices
-.pdf
+*.pdf
+
+*.tex
+!invoices_template.tex
+
 
 #sessions and bank account details
 sessions.xlsx
