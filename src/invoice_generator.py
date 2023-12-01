@@ -4,18 +4,25 @@ import os
 import subprocess
 
 class InvoiceData:
-    def __init__(self, po_num, description, unit_price, qty):
+    def __init__(self, name_id, po_num, description, unit_price, qty, account_name, sort_code, account_number
+    ):
+        self.name_id = name_id
         self.po_num = po_num
         self.description = description
         self.unit_price = unit_price
         self.qty = qty
         self.amount = qty * unit_price
         self.total_amount = self.amount
+        self.account_name = account_name
+        self.sort_code = sort_code
+        self.account_number = account_number
 
 
 # Load an Excel file into a pandas DataFrame
-df = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions')
-print(f'df: {df}')
+df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions')
+print(f'df: {df_sessions}')
+
+df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details')
 
 # Load the Jinja2 template
 env = Environment(loader=FileSystemLoader('../invoices'))
@@ -26,24 +33,18 @@ invoice_list = []
 
 # Create a list of InvoiceData objects
 invoice_data = InvoiceData(
+    name_id='bobby',
     po_num='XXX1',
     description='Desvsnfd',
     unit_price=40,
     qty=1,
+    account_name='Bobby',
+    sort_code='123456',
+    account_number='12345678'
 )
 
 invoice_list.append(invoice_data)
 
-
-# Create a list of InvoiceData objects
-invoice_data = InvoiceData(
-    po_num='XXX2',
-    description='Desvsnfd',
-    unit_price=40,
-    qty=1,
-)
-
-invoice_list.append(invoice_data)
 
 for invoice_data in invoice_list:
     # Render the template with data from the DataFrame
@@ -52,7 +53,10 @@ for invoice_data in invoice_list:
                                     unit_price=invoice_data.unit_price,
                                     qty=invoice_data.qty,
                                     amount=invoice_data.amount,
-                                    total_amount=invoice_data.total_amount
+                                    total_amount=invoice_data.total_amount,
+                                    account_name=invoice_data.account_name,
+                                    sort_code=invoice_data.sort_code,
+                                    account_number=invoice_data.account_number
     )
 
     # Write the rendered LaTeX to a file
