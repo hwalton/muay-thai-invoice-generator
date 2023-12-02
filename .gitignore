@@ -169,5 +169,3 @@ cython_debug/
 #sessions and bank account details
 sessions.xlsx
 ~$sessions.xlsx
-
-logo.jpg
