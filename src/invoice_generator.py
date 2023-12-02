@@ -33,7 +33,7 @@ class InvoiceData:
 
 # Load an Excel file into a pandas DataFrame
 df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions')
-df_sessions['Date'] = pd.to_datetime(df_sessions['Date'])
+df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
 print(f'df: {df_sessions}')
 
 df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details')
@@ -52,11 +52,26 @@ filtered_df = df_sessions[(df_sessions['Invoice Sent to SU'] == 'NO') & (df_sess
 # Ensure 'Date' is in datetime format
 
 
-# Find the most common month (as a number)
-most_common_month_num = filtered_df['Date'].dt.month.mode()[0]
 
-# Convert this number to the corresponding month name and get the first three letters in uppercase
-most_common_month = filtered_df['Date'].dt.month_name().iloc[most_common_month_num - 1][:3].upper()
+months = [date.month for date in filtered_df['Date'] if pd.notnull(date)]
+most_common_month_num = pd.Series(months).mode()[0]
+
+month_dict = {
+    1: 'JAN',
+    2: 'FEB',
+    3: 'MAR',
+    4: 'APR',
+    5: 'MAY',
+    6: 'JUN',
+    7: 'JUL',
+    8: 'AUG',
+    9: 'SEP',
+    10: 'OCT',
+    11: 'NOV',
+    12: 'DEC'
+}
+
+most_common_month = month_dict[most_common_month_num]
 
 # Group by 'name_id' and iterate over each group
 for _, group in filtered_df.groupby('name_id'):
