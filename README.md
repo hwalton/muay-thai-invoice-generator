@@ -1,10 +1,14 @@
 # muay-thai-invoice-generator
 
-activate venv with:
-$source venv/bin/activate
+#python
+- `$ venv/bin/activate`
+- `$ pip install -r requirements.txt`
+- `$ deactivate`
+
 
 before requesting PO's:
 
+copy sessions_template.xlsx to sessions.xlsx
 copy data from google drive session tracker to sessions.xlsx
 
 run invoice_generator.py script
