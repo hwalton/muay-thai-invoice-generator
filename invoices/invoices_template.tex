@@ -50,17 +50,17 @@
 
     \vspace{1cm}
 
-% Table for invoice details
     \begin{longtable}{@{} l p{0.5\textwidth} r r r @{}}
         \toprule
-        \textbf{Item no.} & \raggedright\textbf{Description} & \textbf{Unit Price (£)} & \textbf{Qty} & \textbf{Amount (£)} \\
+        \textbf{Item no.} & \textbf{Description} & \textbf{Unit Price (£)} & \textbf{Qty} & \textbf{Amount (£)} \\
         \midrule
         \endhead
         % Example row (repeat similar rows for each item)
-        1 & {{ description }} & {{ unit_price }} & {{ qty }} & {{ amount }} \\
+        1 & \parbox[t]{0.5\textwidth}{\raggedright {{ description }}\strut} & {{ unit_price }} & {{ qty }} & {{ amount }} \\
         % ...
         \bottomrule
     \end{longtable}
+
 
 % Total table
     \hfill \begin{tabular}{lr}
