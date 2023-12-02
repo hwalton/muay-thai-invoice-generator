@@ -24,20 +24,18 @@
         \Large\textbf{\underline{Invoice}}
     \end{center}
 
-% Logo
+% Logo and Address side by side using tabular
     \noindent
-    \includegraphics[width=0.33\textwidth]{../data/logo.jpg}
-
-
-% Top right address
-    \vspace{-2cm} % Adjust vertical space as needed
-    \begin{flushright}
-        Sheffield Thai Boxing Gymnasium (Wicker Camp) \\
-        Clarence Works, Effingham Rd \\
-        Sheffield S4 7YS \\
-        Date: \today{} \\
-        PO: {{ po_num }}
-    \end{flushright}
+    \begin{tabular}{@{}p{0.33\textwidth}p{0.66\textwidth}@{}}
+        \raisebox{-\totalheight}{\includegraphics[width=\linewidth]{../data/logo.jpg}} &
+        \begin{flushright}
+            Sheffield Thai Boxing Gymnasium (Wicker Camp) \\
+            Clarence Works, Effingham Rd \\
+            Sheffield S4 7YS \\
+            Date: \today{} \\
+            PO: {{ po_num }}
+        \end{flushright} \\
+    \end{tabular}
 
     \vspace{1cm} % Add some vertical space
 
