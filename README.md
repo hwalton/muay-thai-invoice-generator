@@ -5,6 +5,8 @@
 - `$ pip install -r requirements.txt`
 - `$ deactivate`
 
+add wicker camp logo as "logo.jpg" to template from google drive/graphics
+
 
 before requesting PO's:
 
