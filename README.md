@@ -21,3 +21,8 @@ once invoice number received:
 
 update PO # received column;
 rerun invoice_generator.py script
+
+
+Tickets (features to add):
+
+Add instructor names to description
