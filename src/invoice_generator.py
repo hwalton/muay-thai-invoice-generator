@@ -28,7 +28,7 @@ class InvoiceData:
         assert row['Fee'] == self.unit_price, f'Fee: {row["Fee"]} != unit_price: {self.unit_price} - not constant'
         self.qty += 1
         self.amount = self.qty * self.unit_price
-        self.total_amount += self.amount
+        self.total_amount = self.amount
 
 
 # Load an Excel file into a pandas DataFrame
