@@ -87,7 +87,7 @@ def compile_latex(tex_file, output_dir):
     stdout, stderr = process.communicate()
 
     if process.returncode != 0:
-        print(f"Error in LaTeX compilation: {stderr.decode()}")
+        print(f"Error in LaTeX compilation (this works because of -interation=nonstopmode remove this flag to see err): {stderr.decode()}")
         return False
     else:
         output_pdf = os.path.basename(tex_file).replace('.tex', '.pdf')
