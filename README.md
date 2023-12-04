@@ -1,9 +1,12 @@
 # muay-thai-invoice-generator
 
 #python
-- `$ venv/bin/activate`
-- `$ pip install -r requirements.txt`
-- `$ deactivate`
+* `$ venv/bin/activate`
+* `$ pip install -r requirements.txt`
+* `$ deactivate`
+
+* `$ sudo apt-get install texlive`
+
 
 * add wicker camp logo as "logo.jpg" to template from google drive/graphics
 
