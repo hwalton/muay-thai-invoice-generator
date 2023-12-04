@@ -68,23 +68,31 @@ for index, row in df_final_invoices.iterrows():
         break  # Remove this if processing multiple invoices
 
 import subprocess
+import os
+
+# Ensure the output directory exists
+output_dir = '../invoices/output'
+os.makedirs(output_dir, exist_ok=True)
+
+# Path for the filled LaTeX file
+tex_file_path = '../invoices/filled_invoice.tex'
 
 # Write the final LaTeX content to a new file
-tex_file_path = '../invoices/filled_invoice.tex'
 with open(tex_file_path, 'w') as file:
     file.write(latex_template)
 
-# Compile the LaTeX document using pdflatex
-def compile_latex(tex_file):
-    process = subprocess.Popen(['pdflatex', tex_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# Function to compile the LaTeX document
+def compile_latex(tex_file, output_dir):
+    process = subprocess.Popen(['pdflatex', '-interaction=nonstopmode', '-output-directory', output_dir, tex_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
 
     if process.returncode != 0:
         print(f"Error in LaTeX compilation: {stderr.decode()}")
         return False
     else:
-        print(f"LaTeX document compiled successfully. Output in {tex_file.replace('.tex', '.pdf')}")
+        output_pdf = os.path.basename(tex_file).replace('.tex', '.pdf')
+        print(f"LaTeX document compiled successfully. Output in {os.path.join(output_dir, output_pdf)}")
         return True
 
 # Call the function to compile the LaTeX file
-compile_latex(tex_file_path)
+compile_latex(tex_file_path, output_dir)
