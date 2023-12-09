@@ -143,6 +143,14 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+# PyCharm
+*.py[cod]
+*.log
+*.egg-info/
+dist/
+build/
+.idea/
+
 # Pyre type checker
 .pyre/
 
