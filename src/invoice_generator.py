@@ -7,7 +7,7 @@ class InvoiceData:
     def __init__(self, name_id, po_num, unit_price, account_name, sort_code, account_number, first_name, last_name
     ):
         self.name_id = name_id
-        self.po_num = po_num
+        self.po_num = int(po_num)
         self.description = f'Instructor {first_name} {last_name} for Muay Thai Session(s):'
         self.unit_price = unit_price
         self.qty = 0
@@ -108,16 +108,16 @@ for _, row in filtered_df.iterrows():
 for invoice_data in invoice_list:
     # Render the template with data from the DataFrame
     rendered_tex = template.render( po_num=invoice_data.po_num,
-                                    description=invoice_data.description,
-                                    unit_price=invoice_data.unit_price,
-                                    qty=invoice_data.qty,
-                                    amount=invoice_data.amount,
-                                    total_amount=invoice_data.total_amount,
-                                    account_name=invoice_data.account_name,
-                                    sort_code=invoice_data.sort_code,
-                                    account_number=invoice_data.account_number,
-                                    first_name=invoice_data.first_name,
-                                    last_name=invoice_data.last_name
+                                    description=str(invoice_data.description),
+                                    unit_price="{:.2f}".format(invoice_data.unit_price),
+                                    qty=int(invoice_data.qty),
+                                    amount="{:.2f}".format(invoice_data.amount),
+                                    total_amount="{:.2f}".format(invoice_data.total_amount),
+                                    account_name=str(invoice_data.account_name),
+                                    sort_code=str(invoice_data.sort_code),
+                                    account_number=str(invoice_data.account_number),
+                                    first_name=str(invoice_data.first_name),
+                                    last_name=str(invoice_data.last_name)
     )
 
     # Write the rendered LaTeX to a file
