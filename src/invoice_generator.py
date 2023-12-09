@@ -4,11 +4,11 @@ import os
 import subprocess
 
 class InvoiceData:
-    def __init__(self, name_id, po_num, unit_price, account_name, sort_code, account_number
+    def __init__(self, name_id, po_num, unit_price, account_name, sort_code, account_number, first_name, last_name
     ):
         self.name_id = name_id
         self.po_num = po_num
-        self.description = 'Instructor for Muay Thai Session(s):'
+        self.description = f'Instructor {first_name} {last_name} for Muay Thai Session(s):'
         self.unit_price = unit_price
         self.qty = 0
         self.amount = self.qty * self.unit_price
@@ -22,9 +22,11 @@ class InvoiceData:
             'G': 'Graded',
             'Womens GIAG': 'Womens GIAG'
         }
+        self.first_name = first_name
+        self.last_name = last_name
 
     def update_by_row(self, row):
-        self.description += fr'\\{row["Date"].strftime("%d-%m-%Y")}, {self.BA_dict[row["Beginner/Advanced"]]}'
+        self.description += fr'\\{row["Date"].strftime("%d-%m-%Y")} {self.BA_dict[row["Beginner/Advanced"]]};'
         assert row['Fee'] == self.unit_price, f'Fee: {row["Fee"]} != unit_price: {self.unit_price} - not constant'
         self.qty += 1
         self.amount = self.qty * self.unit_price
@@ -45,14 +47,10 @@ template = env.get_template('invoices_template.tex')
 
 unique_name_ids = []
 
-
 # Filter the DataFrame to include only rows where 'Invoice Sent to SU' is 'NO'
 filtered_df = df_sessions[(df_sessions['Invoice Sent to SU'] == 'NO') & (df_sessions['script_ignore'] != 1)]
 
 # Ensure 'Date' is in datetime format
-
-
-
 months = [date.month for date in filtered_df['Date'] if pd.notnull(date)]
 most_common_month_num = pd.Series(months).mode()[0]
 
@@ -89,11 +87,13 @@ invoice_list = []
 for id in unique_name_ids:
     invoice_data = InvoiceData(
             name_id=id['name_id'],
-            po_num = id['po_num'] if not pd.isna(id['po_num']) else fr"{id['name_id']}-{id['most_common_date']}",
+            po_num = int(id['po_num']) if not pd.isna(id['po_num']) else fr"{id['name_id']}-{id['most_common_date']}",
             unit_price=id['unit_price'],
             account_name=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'account_name'].values[0],
             sort_code=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'sort_code'].values[0],
-            account_number=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'account_number'].values[0]
+            account_number=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'account_number'].values[0],
+            first_name=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'first_name'].values[0],
+            last_name=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'last_name'].values[0]
         )
 
 
@@ -115,7 +115,9 @@ for invoice_data in invoice_list:
                                     total_amount=invoice_data.total_amount,
                                     account_name=invoice_data.account_name,
                                     sort_code=invoice_data.sort_code,
-                                    account_number=invoice_data.account_number
+                                    account_number=invoice_data.account_number,
+                                    first_name=invoice_data.first_name,
+                                    last_name=invoice_data.last_name
     )
 
     # Write the rendered LaTeX to a file

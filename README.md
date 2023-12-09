@@ -19,5 +19,7 @@ use the description and payment values to request invoices
 
 once invoice number received:
 
-update PO # received column;
+update PO # received column in sessions.xlsx
+save sessions.xlsx
+
 rerun invoice_generator.py script
