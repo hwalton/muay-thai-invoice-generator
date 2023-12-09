@@ -1,0 +1,3 @@
+Notes,script_ignore,Date,Day,Week,Beginner/Advanced,Location,name_id,first_name,last_name,Fee,PO Requested,PO # Received,Invoice Sent to SU,Payment Confirmed Complete
+,0,2023-09-29,Friday,1,GIAG,Wicker Camp,joe,Joseph,Bloggs,40,YES,3001.0,YES,YES
+Cancelled,1,2023-09-30,Saturday,1,B,Wicker Camp,Jonny,John,Appleseed,40,,,NO,NO
