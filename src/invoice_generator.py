@@ -7,7 +7,7 @@ class InvoiceData:
     def __init__(self, name_id, po_num, unit_price, account_name, sort_code, account_number, first_name, last_name
     ):
         self.name_id = name_id
-        self.po_num = int(po_num)
+        self.po_num = po_num
         self.description = f'Instructor {first_name} {last_name} for Muay Thai Session(s):'
         self.unit_price = unit_price
         self.qty = 0
