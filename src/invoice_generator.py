@@ -29,7 +29,7 @@ class InvoiceData:
         self.last_name = last_name
 
     def update_by_row(self, row):
-        self.description += fr'\\{row["Date"].strftime("%d-%m-%Y")} {self.BA_dict[row["Beginner/Advanced"]]};'
+        self.description += fr'\\{row["Date"].strftime("%d-%m-%Y")} {row["Beginner/Advanced"]};'
         assert row['Fee'] == self.unit_price, f'Fee: {row["Fee"]} != unit_price: {self.unit_price} - not constant'
         self.qty += 1
         self.amount = self.qty * self.unit_price
