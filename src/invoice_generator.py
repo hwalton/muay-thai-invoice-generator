@@ -20,6 +20,9 @@ class InvoiceData:
             'GIAG': 'GIAG',
             'B': 'Beginner',
             'G': 'Graded',
+            'M': 'Mixed',
+            'GS': 'Graded Sparring',
+            'GT': 'Graded Technique',
             'Womens GIAG': 'Womens GIAG'
         }
         self.first_name = first_name
