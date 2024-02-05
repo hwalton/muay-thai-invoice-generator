@@ -41,6 +41,17 @@ df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions')
 df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
 print(f'df: {df_sessions}')
 
+# Asserts for the DataFrame to ensure it has been updated correctly
+
+found_no = False
+for i in range(len(df_sessions)):
+    row = df_sessions.iloc[i]
+
+    if row['Invoice Sent to SU'] == 'NO':
+        found_no = True
+
+assert found_no, "No new invoices to create (No line contains 'NO' in the 'Invoice Sent to SU' column.)"
+
 df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details')
 
 # Load the Jinja2 template
