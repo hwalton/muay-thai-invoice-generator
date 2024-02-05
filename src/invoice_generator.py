@@ -54,7 +54,7 @@ template = env.get_template('invoices_template.tex')
 unique_name_ids = []
 
 # Filter the DataFrame to include only rows where 'Invoice Sent to SU' is 'NO'
-filtered_df = df_sessions[(df_sessions['Invoice Sent to SU'] == 'NO') & (df_sessions['script_ignore'] != 1)]
+checking_df = df_sessions[(df_sessions['script_ignore'] == 0)]
 
 # Asserts for the DataFrame to ensure it has been updated correctly
 
@@ -62,8 +62,8 @@ found_no = False
 valid_days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
 valid_Beginner_Advanced = {"GIAG", "B", "G", "M", "GS", "GT", "Womens GIAG"}
 
-for i in range(len(filtered_df)):
-    row = filtered_df.iloc[i]
+for i in range(len(checking_df)):
+    row = checking_df.iloc[i]
 
     assert row['script_ignore'] in [0,1], f"Invalid value in 'script_ignore' column at line {i}: {row['script_ignore']}"
 
@@ -86,6 +86,9 @@ for i in range(len(filtered_df)):
         found_no = True
 
 assert found_no, "No new invoices to create (No line contains 'NO' in the 'Invoice Sent to SU' column.)"
+
+
+filtered_df = df_sessions[(df_sessions['Invoice Sent to SU'] == 'NO') & (df_sessions['script_ignore'] == 0)]
 
 # Ensure 'Date' is in datetime format
 months = [date.month for date in filtered_df['Date'] if pd.notnull(date)]
