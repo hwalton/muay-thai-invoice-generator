@@ -39,7 +39,8 @@ class InvoiceData:
 
 
 # Load an Excel file into a pandas DataFrame
-data_types = {'Week': 'int'}
+data_types = {'Week': 'int',
+              'Fee': 'float'}
 df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions', dtype=data_types)
 df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
 print(f'df: {df_sessions}')
@@ -94,6 +95,9 @@ for i in range(len(checking_df)):
     assert row['first_name'] in valid_first_names, f"'first_name' value not found in df_bank_details at line {i}: {row['first_name']}"
 
     assert row['last_name'] in valid_last_names, f"'last_name' value not found in df_bank_details at line {i}: {row['last_name']}"
+
+    fee = row['Fee']
+    assert np.issubdtype(type(fee), np.floating) and 0 <= fee <= 100, f"'Fee' value is out of range or not a float at line {i}: {fee}"
 
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
