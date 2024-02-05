@@ -61,6 +61,8 @@ checking_df = df_sessions[(df_sessions['script_ignore'] == 0)]
 found_no = False
 valid_days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
 valid_Beginner_Advanced = {"GIAG", "B", "G", "M", "GS", "GT", "Womens GIAG"}
+valid_Location = {"Pearson (Hallam)", "Wicker Camp", "Goodwin Matrix Studio"}
+
 
 for i in range(len(checking_df)):
     row = checking_df.iloc[i]
@@ -81,6 +83,8 @@ for i in range(len(checking_df)):
     assert np.issubdtype(type(week), np.integer) and -100 <= week <= 100, f"'Week' value is out of range or not an integer at line {i}: {week}"
 
     assert row['Beginner/Advanced'] in valid_Beginner_Advanced, f"Invalid value in 'Beginner/Advanced' column at line {i}: {row['Beginner/Advanced']}"
+
+    assert row['Location'] in valid_Location, f"Invalid value in 'Location' column at line {i}: {row['Location']}"
 
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
