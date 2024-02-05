@@ -3,6 +3,7 @@ from jinja2 import Environment, FileSystemLoader
 import os
 import subprocess
 from datetime import datetime
+import numpy as np
 
 class InvoiceData:
     def __init__(self, name_id, po_num, unit_price, account_name, sort_code, account_number, first_name, last_name
@@ -38,7 +39,8 @@ class InvoiceData:
 
 
 # Load an Excel file into a pandas DataFrame
-df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions')
+data_types = {'Week': 'int'}
+df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions', dtype=data_types)
 df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
 print(f'df: {df_sessions}')
 
@@ -61,6 +63,9 @@ for i in range(len(df_sessions)):
             f"Date format is incorrect at line {i}: {row['Date']} (expected format: 'yyyy-mm-dd')")
 
     assert row['Day'] in valid_days, f"Invalid day of the week at line {i}: {row['Day']}"
+
+    week = row['Week']
+    assert np.issubdtype(type(week), np.integer) and -100 <= week <= 100, f"'Week' value is out of range or not an integer at line {i}: {week}"
 
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
