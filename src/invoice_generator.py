@@ -44,13 +44,26 @@ df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions', dtyp
 df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
 print(f'df: {df_sessions}')
 
+df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details')
+
+# Load the Jinja2 template
+env = Environment(loader=FileSystemLoader('../invoices'))
+#print(f"os.getcwd: {os.getcwd()}")
+template = env.get_template('invoices_template.tex')
+
+unique_name_ids = []
+
+# Filter the DataFrame to include only rows where 'Invoice Sent to SU' is 'NO'
+filtered_df = df_sessions[(df_sessions['Invoice Sent to SU'] == 'NO') & (df_sessions['script_ignore'] != 1)]
+
 # Asserts for the DataFrame to ensure it has been updated correctly
 
 found_no = False
 valid_days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+valid_Beginner_Advanced = {"GIAG", "B", "G", "M", "GS", "GT", "Womens GIAG"}
 
-for i in range(len(df_sessions)):
-    row = df_sessions.iloc[i]
+for i in range(len(filtered_df)):
+    row = filtered_df.iloc[i]
 
     assert row['script_ignore'] in [0,1], f"Invalid value in 'script_ignore' column at line {i}: {row['script_ignore']}"
 
@@ -67,22 +80,12 @@ for i in range(len(df_sessions)):
     week = row['Week']
     assert np.issubdtype(type(week), np.integer) and -100 <= week <= 100, f"'Week' value is out of range or not an integer at line {i}: {week}"
 
+    assert row['Beginner/Advanced'] in valid_Beginner_Advanced, f"Invalid value in 'Beginner/Advanced' column at line {i}: {row['Beginner/Advanced']}"
+
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
 
 assert found_no, "No new invoices to create (No line contains 'NO' in the 'Invoice Sent to SU' column.)"
-
-df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details')
-
-# Load the Jinja2 template
-env = Environment(loader=FileSystemLoader('../invoices'))
-#print(f"os.getcwd: {os.getcwd()}")
-template = env.get_template('invoices_template.tex')
-
-unique_name_ids = []
-
-# Filter the DataFrame to include only rows where 'Invoice Sent to SU' is 'NO'
-filtered_df = df_sessions[(df_sessions['Invoice Sent to SU'] == 'NO') & (df_sessions['script_ignore'] != 1)]
 
 # Ensure 'Date' is in datetime format
 months = [date.month for date in filtered_df['Date'] if pd.notnull(date)]
