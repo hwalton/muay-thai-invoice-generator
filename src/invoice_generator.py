@@ -105,8 +105,7 @@ for i in range(len(checking_df)):
     assert row['PO Requested'] in valid_PO_Requested, f"Invalid value in 'PO Requested' column at line {i}: {row['PO Requested']}"
 
     PO_number = row['PO # Received']
-    if not (np.issubdtype(type(PO_number), np.integer) and 0 <= PO_number <= 100000) and not pd.isna(PO_number):
-        raise AssertionError(f"'PO # Received' value is out of range or not an integer at line {i}: {PO_number}")
+    assert ((np.issubdtype(type(PO_number), np.integer) and 0 <= PO_number <= 100000) and not pd.isna(PO_number)), f"'PO # Received' value is out of range or not an integer at line {i}: {PO_number}"
 
 
 
