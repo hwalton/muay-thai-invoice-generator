@@ -62,6 +62,7 @@ found_no = False
 valid_days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
 valid_Beginner_Advanced = {"GIAG", "B", "G", "M", "GS", "GT", "Womens GIAG"}
 valid_Location = {"Pearson (Hallam)", "Wicker Camp", "Goodwin Matrix Studio"}
+valid_name_ids = set(df_bank_details['name_id'])
 
 
 for i in range(len(checking_df)):
@@ -85,6 +86,8 @@ for i in range(len(checking_df)):
     assert row['Beginner/Advanced'] in valid_Beginner_Advanced, f"Invalid value in 'Beginner/Advanced' column at line {i}: {row['Beginner/Advanced']}"
 
     assert row['Location'] in valid_Location, f"Invalid value in 'Location' column at line {i}: {row['Location']}"
+
+    assert row['name_id'] in valid_name_ids, f"'name_id' value not found in df_bank_details at line {i}: {row['name_id']}"
 
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
