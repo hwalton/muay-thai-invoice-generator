@@ -45,6 +45,7 @@ data_types = {'Week': 'int',
 
 df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions', dtype=data_types)
 df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
+df_sessions = df_sessions[(df_sessions['script_ignore'] == 0)]
 print(f'df: {df_sessions}')
 
 df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details')
@@ -56,11 +57,7 @@ template = env.get_template('invoices_template.tex')
 
 unique_name_ids = []
 
-# Filter the DataFrame to include only rows where 'Invoice Sent to SU' is 'NO'
-checking_df = df_sessions[(df_sessions['script_ignore'] == 0)]
-
-# Asserts for the DataFrame to ensure it has been updated correctly
-
+# Asserts for the DataFrame to ensure sessions spreadsheet is correctly formatted
 found_no = False
 valid_days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
 valid_Beginner_Advanced = {"GIAG", "B", "G", "M", "GS", "GT", "Womens GIAG"}
@@ -69,10 +66,14 @@ valid_name_ids = set(df_bank_details['name_id'])
 valid_first_names = set(df_bank_details['first_name'])
 valid_last_names = set(df_bank_details['last_name'])
 valid_PO_Requested = {"YES", "NO"}
+valid_Invoice_Sent_to_SU = {"YES", "NO"}
+valid_Payment_Confirmed_Completed = {"YES", "NO"}
 
 
-for i in range(len(checking_df)):
-    row = checking_df.iloc[i]
+for i in range(len(df_sessions)):
+    row = df_sessions.iloc[i]
+
+    assert df_sessions.shape[1] == 15, f"The number of columns in the DataFrame is not 15, it's {df_sessions.shape[1]}"
 
     assert row['script_ignore'] in [0,1], f"Invalid value in 'script_ignore' column at line {i}: {row['script_ignore']}"
 
@@ -83,6 +84,7 @@ for i in range(len(checking_df)):
     except ValueError:
         raise AssertionError(
             f"Date format is incorrect at line {i}: {row['Date']} (expected format: 'yyyy-mm-dd')")
+
 
     assert row['Day'] in valid_days, f"Invalid day of the week at line {i}: {row['Day']}"
 
@@ -107,7 +109,9 @@ for i in range(len(checking_df)):
     PO_number = row['PO # Received']
     assert ((np.issubdtype(type(PO_number), np.integer) and 0 <= PO_number <= 100000) and not pd.isna(PO_number)), f"'PO # Received' value is out of range or not an integer at line {i}: {PO_number}"
 
+    assert row['Invoice Sent to SU'] in valid_Invoice_Sent_to_SU, f"Invalid value in 'Invoice Sent to SU' column at line {i}: {row['Invoice Sent to SU']}"
 
+    assert row['Payment Confirmed Complete'] in valid_Payment_Confirmed_Completed, f"Invalid value in 'Payment Confirmed Complete' column at line {i}: {row['Payment Confirmed Complete']}"
 
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
