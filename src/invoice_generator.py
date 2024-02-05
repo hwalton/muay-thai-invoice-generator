@@ -40,7 +40,9 @@ class InvoiceData:
 
 # Load an Excel file into a pandas DataFrame
 data_types = {'Week': 'int',
-              'Fee': 'float'}
+              'Fee': 'float',
+              'PO # Received': 'Int64'}
+
 df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions', dtype=data_types)
 df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
 print(f'df: {df_sessions}')
@@ -66,6 +68,7 @@ valid_Location = {"Pearson (Hallam)", "Wicker Camp", "Goodwin Matrix Studio"}
 valid_name_ids = set(df_bank_details['name_id'])
 valid_first_names = set(df_bank_details['first_name'])
 valid_last_names = set(df_bank_details['last_name'])
+valid_PO_Requested = {"YES", "NO"}
 
 
 for i in range(len(checking_df)):
@@ -98,6 +101,14 @@ for i in range(len(checking_df)):
 
     fee = row['Fee']
     assert np.issubdtype(type(fee), np.floating) and 0 <= fee <= 100, f"'Fee' value is out of range or not a float at line {i}: {fee}"
+
+    assert row['PO Requested'] in valid_PO_Requested, f"Invalid value in 'PO Requested' column at line {i}: {row['PO Requested']}"
+
+    PO_number = row['PO # Received']
+    if not (np.issubdtype(type(PO_number), np.integer) and 0 <= PO_number <= 100000) and not pd.isna(PO_number):
+        raise AssertionError(f"'PO # Received' value is out of range or not an integer at line {i}: {PO_number}")
+
+
 
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
