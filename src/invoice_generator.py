@@ -2,6 +2,7 @@ import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 import os
 import subprocess
+from datetime import datetime
 
 class InvoiceData:
     def __init__(self, name_id, po_num, unit_price, account_name, sort_code, account_number, first_name, last_name
@@ -44,10 +45,22 @@ print(f'df: {df_sessions}')
 # Asserts for the DataFrame to ensure it has been updated correctly
 
 found_no = False
+valid_days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+
 for i in range(len(df_sessions)):
     row = df_sessions.iloc[i]
 
     assert row['script_ignore'] in [0,1], f"Invalid value in 'script_ignore' column at line {i}: {row['script_ignore']}"
+
+    try:
+        date_str = str(row['Date'])
+
+        parsed_date = datetime.strptime(date_str, '%Y-%m-%d')
+    except ValueError:
+        raise AssertionError(
+            f"Date format is incorrect at line {i}: {row['Date']} (expected format: 'yyyy-mm-dd')")
+
+    assert row['Day'] in valid_days, f"Invalid day of the week at line {i}: {row['Day']}"
 
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
