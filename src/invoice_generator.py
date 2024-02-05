@@ -47,6 +47,8 @@ found_no = False
 for i in range(len(df_sessions)):
     row = df_sessions.iloc[i]
 
+    assert row['script_ignore'] in [0,1], f"Invalid value in 'script_ignore' column at line {i}: {row['script_ignore']}"
+
     if row['Invoice Sent to SU'] == 'NO':
         found_no = True
 
