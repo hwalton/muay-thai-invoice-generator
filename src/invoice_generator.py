@@ -107,7 +107,7 @@ for i in range(len(df_sessions)):
     assert row['PO Requested'] in valid_PO_Requested, f"Invalid value in 'PO Requested' column at line {i}: {row['PO Requested']}"
 
     PO_number = row['PO # Received']
-    assert ((np.issubdtype(type(PO_number), np.integer) and 0 <= PO_number <= 100000) and not pd.isna(PO_number)), f"'PO # Received' value is out of range or not an integer at line {i}: {PO_number}"
+    assert (pd.isna(PO_number) or (np.issubdtype(type(PO_number), np.integer) and 0 <= PO_number <= 100000)), f"'PO # Received' value is out of range, not an integer, or not empty at line {i}: {PO_number}"
 
     assert row['Invoice Sent to SU'] in valid_Invoice_Sent_to_SU, f"Invalid value in 'Invoice Sent to SU' column at line {i}: {row['Invoice Sent to SU']}"
 
@@ -123,7 +123,9 @@ filtered_df = df_sessions[(df_sessions['Invoice Sent to SU'] == 'NO') & (df_sess
 
 # Ensure 'Date' is in datetime format
 months = [date.month for date in filtered_df['Date'] if pd.notnull(date)]
+years = [date.year for date in filtered_df['Date'] if pd.notnull(date)]
 most_common_month_num = pd.Series(months).mode()[0]
+most_common_year = str(pd.Series(years).mode()[0])
 
 month_dict = {
     1: 'JAN',
@@ -142,6 +144,7 @@ month_dict = {
 
 most_common_month = month_dict[most_common_month_num]
 
+
 # Group by 'name_id' and iterate over each group
 for _, group in filtered_df.groupby('name_id'):
     first_row = group.iloc[0]  # Select the first row of the group
@@ -149,7 +152,7 @@ for _, group in filtered_df.groupby('name_id'):
         'name_id': first_row['name_id'],
         'po_num': first_row['PO # Received'],
         'unit_price': first_row['Fee'],
-        'most_common_date': most_common_month
+        'most_common_date': most_common_year + '-' + most_common_month
     }
     unique_name_ids.append(data_dict)
 
@@ -158,7 +161,7 @@ invoice_list = []
 for id in unique_name_ids:
     invoice_data = InvoiceData(
             name_id=id['name_id'],
-            po_num = int(id['po_num']) if not pd.isna(id['po_num']) else fr"{id['name_id']}-{id['most_common_date']}",
+            po_num = int(id['po_num']) if not pd.isna(id['po_num']) else fr"{id['most_common_date']}-{id['name_id']}",
             unit_price=id['unit_price'],
             account_name=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'account_name'].values[0],
             sort_code=df_bank_details.loc[df_bank_details['name_id'] == id['name_id'], 'sort_code'].values[0],
