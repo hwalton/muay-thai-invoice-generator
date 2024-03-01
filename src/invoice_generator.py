@@ -25,7 +25,8 @@ class InvoiceData:
             'M': 'Mixed',
             'GS': 'Graded Sparring',
             'GT': 'Graded Technique',
-            'Womens GIAG': 'Womens GIAG'
+            'Womens GIAG': 'Womens GIAG',
+            'W': 'Womens'
         }
         self.first_name = first_name
         self.last_name = last_name
@@ -60,7 +61,7 @@ unique_name_ids = []
 # Asserts for the DataFrame to ensure sessions spreadsheet is correctly formatted
 found_no = False
 valid_days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
-valid_Beginner_Advanced = {"GIAG", "B", "G", "M", "GS", "GT", "Womens GIAG"}
+valid_Beginner_Advanced = {"GIAG", "B", "G", "M", "GS", "GT", "Womens GIAG", "W"}
 valid_Location = {"Pearson (Hallam)", "Wicker Camp", "Goodwin Matrix Studio"}
 valid_name_ids = set(df_bank_details['name_id'])
 valid_first_names = set(df_bank_details['first_name'])
