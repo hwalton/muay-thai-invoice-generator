@@ -177,6 +177,7 @@ for id in unique_name_ids:
 for _, row in filtered_df.iterrows():
     for invoice_data in invoice_list:
         if invoice_data.name_id == row['name_id']:
+            assert invoice_data.po_num == row['PO # Received'], f"PO # Received: {row['PO # Received']} != po_num: {invoice_data.po_num} - not constant"
             invoice_data.update_by_row(row)
 
 
