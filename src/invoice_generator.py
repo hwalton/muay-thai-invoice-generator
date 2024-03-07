@@ -42,14 +42,16 @@ class InvoiceData:
 # Load an Excel file into a pandas DataFrame
 data_types = {'Week': 'int',
               'Fee': 'float',
-              'PO # Received': 'Int64'}
+              'PO # Received': 'Int64',
+              'account_number': 'str',
+              'sort_code': 'str'}
 
 df_sessions = pd.read_excel('../data/sessions.xlsx', sheet_name='Sessions', dtype=data_types)
 df_sessions['Date'] = pd.to_datetime(df_sessions['Date']).dt.date
 df_sessions = df_sessions[(df_sessions['script_ignore'] == 0)]
 print(f'df: {df_sessions}')
 
-df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details')
+df_bank_details = pd.read_excel('../data/sessions.xlsx', sheet_name='Instructor Payment Details', dtype=data_types)
 
 # Load the Jinja2 template
 env = Environment(loader=FileSystemLoader('../invoices'))
