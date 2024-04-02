@@ -150,7 +150,19 @@ most_common_month = month_dict[most_common_month_num]
 
 # Group by 'name_id' and iterate over each group
 for _, group in filtered_df.groupby('name_id'):
+
+    # Extract the "PO # Received" column, ignoring NaN for equality check
+    po_received = group['PO # Received'].dropna().unique()
+
+    # Check if all values are NaN in the original column
+    all_na = group['PO # Received'].isna().all()
+    any_na = group['PO # Received'].isna().any()
+
+    # Assert that either there is only one unique value (ignoring NaNs) or all values are NaN
+    assert len(po_received) <= 1 and all_na == any_na, "Not all values in 'PO # Received' are the same or NaN for a group"
+
     first_row = group.iloc[0]  # Select the first row of the group
+
     data_dict = {
         'name_id': first_row['name_id'],
         'po_num': first_row['PO # Received'],
@@ -179,8 +191,6 @@ for id in unique_name_ids:
 for _, row in filtered_df.iterrows():
     for invoice_data in invoice_list:
         if invoice_data.name_id == row['name_id']:
-            if not pd.isna(row['PO # Received']):
-                assert invoice_data.po_num == row['PO # Received'], f"PO # Received: {row['PO # Received']} != po_num: {invoice_data.po_num} - not constant"
             invoice_data.update_by_row(row)
 
 
