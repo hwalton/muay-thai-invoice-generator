@@ -76,7 +76,7 @@ valid_Payment_Confirmed_Completed = {"YES", "NO"}
 for i in range(len(df_sessions)):
     row = df_sessions.iloc[i]
 
-    assert (df_sessions.shape[1] == 15 or df_sessions.shape[1] == 16), f"The number of columns in the DataFrame is not 15, it's {df_sessions.shape[1]}"
+    assert (df_sessions.shape[1] == 15 or df_sessions.shape[1] == 16), f"The number of columns in the DataFrame is not 15 or 16, it's {df_sessions.shape[1]}"
 
     assert row['script_ignore'] in [0,1], f"Invalid value in 'script_ignore' column at line {i}: {row['script_ignore']}"
 
