@@ -1,6 +1,12 @@
 # muay-thai-invoice-generator
 
-#python
+# Prerequisites
+
+* python 3.8+
+* pip
+
+# Setup
+
 * `$ venv/bin/activate`
 * `$ pip install -r requirements.txt`
 * `$ deactivate`
@@ -8,16 +14,16 @@
 * `$ sudo apt-get install texlive`
 
 
-* add wicker camp logo as "logo.jpg" to template from google drive/graphics
+* Add wicker camp logo as "logo.jpg" to template from google drive/graphics
 
 
 before requesting PO's:
 -
 
 * copy sessions_template.xlsx to sessions.xlsx
-* copy data from google drive session tracker to sessions.xlsx
-* run invoice_generator.py script
-* use the description and payment values to request invoices
-* once invoice number received:
-* update PO # received column;
-* rerun invoice_generator.py script
+* Copy data from google drive session tracker to sessions.xlsx
+* Run invoice_generator.py script
+* Use the description and payment values to request invoices
+* Once invoice number received:
+* Update PO # received column;
+* Rerun invoice_generator.py script to recreate these invoices with PO # included
