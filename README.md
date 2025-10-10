@@ -6,11 +6,10 @@
 * pip
 
 # Setup
-
+Run:
 * `$ python3 -m venv venv`
 * `$ source venv/bin/activate`
 * `$ pip install -r requirements.txt`
-* `$ deactivate`
 
 * `$ sudo apt-get install texlive`
 
@@ -18,7 +17,7 @@
 * Add wicker camp logo as "logo.jpg" to template from google drive/graphics
 
 
-before requesting PO's:
+Before requesting PO's:
 -
 
 * copy sessions_template.xlsx to sessions.xlsx
